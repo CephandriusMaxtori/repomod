@@ -5,10 +5,16 @@
 	"name": "REPO Cart Mod",
 	"entrypoints": {
 		"main": [
-			"com.repo.RepoMod"
+			{
+				"adapter": "kotlin",
+				"value": "com.repo.RepoMod"
+			}
 		],
 		"client": [
-			"com.repo.client.RepoModClient"
+			{
+				"adapter": "kotlin",
+				"value": "com.repo.client.RepoModClient"
+			}
 		]
 	},
 	"depends": {
