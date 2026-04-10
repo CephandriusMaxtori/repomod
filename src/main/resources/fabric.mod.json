@@ -1,0 +1,20 @@
+{
+	"schemaVersion": 1,
+	"id": "repo",
+	"version": "${version}",
+	"name": "REPO Cart Mod",
+	"entrypoints": {
+		"main": [
+			"com.repo.RepoMod"
+		],
+		"client": [
+			"com.repo.client.RepoModClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"fabric-api": "*",
+		"fabric-language-kotlin": ">=1.12.1",
+		"minecraft": "~1.21.1"
+	}
+}
