@@ -1,29 +1,36 @@
 package com.repo.entity
 
 import net.minecraft.entity.EntityType
-import net.minecraft.entity.ItemEntity
-import net.minecraft.entity.vehicle.ChestMinecartEntity
-import net.minecraft.util.math.Box
+import net.minecraft.entity.data.DataTracker
+import net.minecraft.entity.data.TrackedData
+import net.minecraft.entity.data.TrackedDataHandlerRegistry
+import net.minecraft.entity.vehicle.AbstractMinecartEntity
+import net.minecraft.entity.vehicle.AbstractMinecartEntity.Type
+import net.minecraft.item.Item
+import net.minecraft.item.Items
 import net.minecraft.world.World
 
-class RepoCartEntity(type: EntityType<out RepoCartEntity>, world: World) :
-    ChestMinecartEntity(type, world) {
+class RepoCartEntity(type: EntityType<out RepoCartEntity>, world: World) : AbstractMinecartEntity(type, world) {
 
-    override fun tick() {
-        super.tick()
+    companion object {
+        // Register the price as tracked data to sync server -> client
+        val PRICE: TrackedData<Int> = DataTracker.registerData(RepoCartEntity::class.java, TrackedDataHandlerRegistry.INTEGER)
+    }
 
-        // Only run logic on the server side every 5 ticks to save performance
-        if (!this.world.isClient && this.isAlive && this.age % 5 == 0) {
-            val area = Box(this.pos.subtract(3.0, 1.0, 3.0), this.pos.add(3.0, 2.0, 3.0))
+    override fun initDataTracker(builder: DataTracker.Builder) {
+        super.initDataTracker(builder)
+        builder.add(PRICE, 0)
+    }
 
-            // Look for items nearby
-            val items = this.world.getEntitiesByClass(ItemEntity::class.java, area) { true }
+    var price: Int
+        get() = this.getDataTracker().get(PRICE) // Use getter method explicitly
+        set(value) = this.getDataTracker().set(PRICE, value)
 
-            for (item in items) {
-                // Pull items toward the center of the cart
-                val pullVec = this.pos.add(0.0, 0.5, 0.0).subtract(item.pos).normalize().multiply(0.2)
-                item.velocity = pullVec
-            }
-        }
+    override fun asItem(): Item {
+        return Items.MINECART 
+    }
+
+    override fun getMinecartType(): AbstractMinecartEntity.Type {
+        return AbstractMinecartEntity.Type.CHEST
     }
 }

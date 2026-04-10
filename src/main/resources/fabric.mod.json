@@ -3,6 +3,7 @@
 	"id": "repo",
 	"version": "${version}",
 	"name": "REPO Cart Mod",
+	"accessWidener": "pricecart.accesswidener",
 	"entrypoints": {
 		"main": [
 			{
