@@ -1,14 +1,21 @@
 package repo.entity
 
-import net.minecraft.item.Item
 import net.minecraft.entity.EntityType
-import net.minecraft.
+import net.minecraft.entity.data.DataTracker
+import net.minecraft.entity.data.TrackedData
+import net.minecraft.entity.data.TrackedDataHandlerRegistry
+import net.minecraft.entity.vehicle.AbstractMinecartEntity
+import net.minecraft.item.Item
+import net.minecraft.item.Items
+import net.minecraft.world.World
 
 class PriceCartEntity(type: EntityType<out PriceCartEntity>, world: World) : AbstractMinecartEntity(type, world) {
 
     companion object {
-        // Register the price as tracked data to sync server -> client
-        val PRICE: TrackedData<Int> = DataTracker.registerData(PriceCartEntity::class.java, TrackedDataHandlerRegistry.INTEGER)
+        val PRICE: TrackedData<Int> = DataTracker.registerData(
+            PriceCartEntity::class.java,
+            TrackedDataHandlerRegistry.INTEGER
+        )
     }
 
     override fun initDataTracker(builder: DataTracker.Builder) {
@@ -16,17 +23,15 @@ class PriceCartEntity(type: EntityType<out PriceCartEntity>, world: World) : Abs
         builder.add(PRICE, 0)
     }
 
-    var price: MatchGroup?
+    var price: Int
         get() = dataTracker.get(PRICE)
-        set(value) = dataTracker.set(PRICE, value)
+        set(value) { dataTracker.set(PRICE, value) }
 
     override fun asItem(): Item {
-        return Items.MINECART // Change to your custom item if applicable
+        return Items.MINECART
     }
 
-    override fun getMinecartType(): Type {
-        // You can return a custom type here if you registered one, 
-        // or use CHEST if you want similar behavior.
-        return Type.CHEST 
+    override fun getMinecartType(): AbstractMinecartEntity.Type {
+        return AbstractMinecartEntity.Type.CHEST
     }
 }
