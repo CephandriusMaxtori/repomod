@@ -1,6 +1,8 @@
 package repo.entity
 
 import net.minecraft.item.Item
+import net.minecraft.entity.EntityType
+import net.minecraft.
 
 class PriceCartEntity(type: EntityType<out PriceCartEntity>, world: World) : AbstractMinecartEntity(type, world) {
 
@@ -14,7 +16,7 @@ class PriceCartEntity(type: EntityType<out PriceCartEntity>, world: World) : Abs
         builder.add(PRICE, 0)
     }
 
-    var price: Int
+    var price: MatchGroup?
         get() = dataTracker.get(PRICE)
         set(value) = dataTracker.set(PRICE, value)
 
