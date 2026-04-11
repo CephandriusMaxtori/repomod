@@ -9,6 +9,13 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	maven {
+		url = uri("https://maven.blamejared.com/")
+	}
+
+	maven {
+		url = uri("https://maven.theillusivec4.top/")
+	}
 }
 
 loom {
@@ -25,13 +32,13 @@ loom {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:1.21.1"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Essential for Kotlin support in Fabric
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+	// modImplementation 'team.lodestar.lodestone:lodestone:1.21.1-1.8.2.524' // REMOVE THIS
 }
 
 processResources {
@@ -74,4 +81,14 @@ task buildrefresh(type: Exec) {
 	def executable = System.getProperty('os.name').toLowerCase().contains('windows') ? 'gradlew.bat' : './gradlew'
 
 	commandLine executable, 'build', '--refresh-dependencies'
+}
+
+task cleanbuild(type: Exec) {
+	group = 'Build'
+	description = 'Runs build with --refresh-dependencies'
+
+	// Detects if you are on Windows or Unix-like system
+	def executable = System.getProperty('os.name').toLowerCase().contains('windows') ? 'gradlew.bat' : './gradlew'
+
+	commandLine executable, 'clean', 'build'
 }
